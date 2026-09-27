@@ -1,0 +1,67 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: h2
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+---
+# 默认 profile：H2 内存库（MySQL 兼容模式），零安装即可启动验证
+spring:
+  config:
+    activate:
+      on-profile: h2
+  datasource:
+    url: jdbc:h2:mem:mediation;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  sql:
+    init:
+      mode: always
+
+app:
+  jwt:
+    # 演示用固定令牌头，生产环境应替换为真正的 JWT 签名
+    secret: court-mediation-demo-secret-key-0123456789
+
+---
+# MySQL profile：mvn spring-boot:run -Dspring-boot.run.profiles=mysql
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: jdbc:mysql://localhost:3306/court_mediation?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+
+app:
+  jwt:
+    secret: court-mediation-demo-secret-key-0123456789
