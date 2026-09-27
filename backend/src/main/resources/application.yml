@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: pre-litigation-mediation
+  # 默认使用 H2（MySQL 兼容模式），零外部依赖即可启动；
+  # 如需切换到 MySQL：--spring.profiles.active=mysql，并在 mysql profile 中配置账号密码
+  datasource:
+    url: jdbc:h2:mem:mediation;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: false
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+app:
+  # 演示用 token 签名前缀（生产环境应替换并放入密钥管理）
+  token-secret: court-mediation-demo-secret
